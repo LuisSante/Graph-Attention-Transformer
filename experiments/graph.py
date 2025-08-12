@@ -1,36 +1,25 @@
 import numpy as np
-
+import config
 from  utils.utils import init_weights, leaky_relu, softmax_with_mask
 from data.dataset import create_graph, adj_to_edge_index, edge_index_to_adj
+from models.gat_layer import GATLayer
 
-print("==============================================================================")
-print("Test init weights")
-W = init_weights(5, 3, seed=42)
 
-print("\n Test leaky_relu ")
-arr = np.array([-2.0, -0.5, 0.0, 0.5, 2.0])
-print("Input:", arr)
-print("Output:", leaky_relu(arr, alpha=0.1))
+if __name__ == "__main__":
+    adj, features, labels = create_graph(num_nodes=6, num_features=5, num_classes=3, self_loops=True)
+    print("Adjacency matrix:\n", adj)
+    print("Features shape:", features.shape)
+    print("Labels:", labels)
 
-print("\n Test softmax_with_mask ")
-logits = np.array([[1.0, 2.0, 3.0],
-                   [3.0, 2.0, 1.0]])
-mask = np.array([[True, True, False],
-                 [True, False, True]])
-print("Logits:\n", logits)
-print("Mask:\n", mask)
-print("Softmax masked:\n", softmax_with_mask(logits, mask))
+    gat_layer = GATLayer(in_features=features.shape[1], out_features=5, seed=config.SEED)
+    h_out, alpha = gat_layer.forward(features, adj, return_attention=True)
 
-print("==============================================================================")
-print("Test create_graph")
-adj, feats, labels = create_graph()
-print("Adj:\n", adj)
-print("Features shape:", feats.shape)
-print("Labels:", labels)
+    print("\nOutput features (h') shape:", h_out.shape)
+    print(h_out)
 
-ei = adj_to_edge_index(adj)
-print("\nEdge index:\n", ei)
+    print("\nAttention coefficients (alpha) shape:", alpha.shape)
+    print(alpha[:3, :3])
 
-adj_back = edge_index_to_adj(ei, num_nodes=adj.shape[0])
-print("\nAdj reconstruida:\n", adj_back)
-print("==============================================================================")
+    row_sums = np.sum(alpha, axis=1)
+    print("\nRow sums (deben ser 1.0 en nodos con vecinos):", row_sums)
+
