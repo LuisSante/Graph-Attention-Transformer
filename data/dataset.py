@@ -1,8 +1,8 @@
 import numpy as np
-from config import SEED
+from config import Config
 
 # Create a graph with 4 nodes (adjaceny matrix, edge list, self-loops)
-def create_graph(num_nodes=4, num_features=5, num_classes=3, self_loops=False, seed=SEED):
+def create_graph(num_nodes=4, num_features=5, num_classes=3, self_loops=False, seed=Config.SEED):
     rng = np.random.RandomState(seed)
 
     p = 0.3

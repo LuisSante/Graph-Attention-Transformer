@@ -151,7 +151,6 @@ class GATModel:
         }
 
 
-# Predefined model configurations based on the paper
 def create_transductive_gat(input_dim, output_dim, seed=None):
     return GATModel(
         input_dim=input_dim,

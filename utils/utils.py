@@ -1,5 +1,5 @@
 import numpy as np
-from config import LARGE_NEGATIVE_NUMBER
+from config import Config
 
 # xavier initialization for weights
 def init_weights(input_dim,  output_dim, seed=None):
@@ -45,7 +45,7 @@ def l2_regularization(weights_list, lambda_reg):
 
 
 def softmax_with_mask(x, mask, axis=1):
-    x_masked = np.where(mask, x, LARGE_NEGATIVE_NUMBER)
+    x_masked = np.where(mask, x, Config.LARGE_NEGATIVE_NUMBER)
     x_shifted = x_masked - np.max(x_masked, axis=axis, keepdims=True)
     exp = np.exp(x_shifted)
     exp = exp * mask  # anulate non-neighbors

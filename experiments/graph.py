@@ -1,5 +1,5 @@
 import numpy as np
-import config
+from config import Config
 from data.dataset import create_graph
 from models.gat_layer import MultiHeadGATLayer
 
@@ -9,7 +9,7 @@ if __name__ == "__main__":
     print("Features shape:", features.shape)
     print("Labels:", labels)
 
-    multihead_gat = MultiHeadGATLayer(in_features=features.shape[1], out_features_per_head=5, n_heads=3, concat=True, seed=config.SEED)
+    multihead_gat = MultiHeadGATLayer(in_features=features.shape[1], out_features_per_head=5, n_heads=3, concat=True, seed=Config.SEED)
 
     # Forward
     h_out, alphas = multihead_gat.forward(features, adj, return_attentions=True)
