@@ -9,8 +9,7 @@ from models.gat_model import GATModel, create_transductive_gat, create_inductive
 from config import Config
 
 def test_basic_functionality():
-    print("🧪 Testing Basic GAT Functionality")
-    print("=" * 50)
+    Config.print_subsection("TESTING BASIC GAT FUNCTIONALITY", char="*")
     
     adj, features, labels = create_graph(num_nodes=6, num_features=5, num_classes=3, self_loops=True, seed=Config.SEED)
     
