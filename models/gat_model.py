@@ -26,6 +26,8 @@ class GATModel:
         # Ajustar número de cabezas si es necesario
         if len(self.n_heads) == 1:
             self.n_heads = self.n_heads * len(self.hidden_dims)
+
+        print(len(self.n_heads))
         
         assert len(self.n_heads) == len(self.hidden_dims), \
             "Number of heads must match number of hidden layers"
