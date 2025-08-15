@@ -42,9 +42,7 @@ def create_graph(num_nodes=4, num_features=5, num_classes=3, self_loops=False, s
 
     if visualize:
         draw_graph_ascii(adj, labels, features=features)
-        draw_graph_matplotlib(adj, labels, features=features, 
-                            title=f"Graph with {num_nodes} nodes", 
-                            show_features=show_features)
+        draw_graph_matplotlib(adj, labels, features=features, show_features=show_features)
 
     return adj, features, labels
 

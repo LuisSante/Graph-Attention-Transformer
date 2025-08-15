@@ -17,7 +17,6 @@ def draw_graph_ascii(adj, labels=None, node_names=None, features=None):
         label_info = f" (clase: {labels[i]})" if labels is not None else ""
         feature_info = ""
         if features is not None:
-            # Mostrar solo los primeros 3 valores del vector para no saturar
             feature_preview = features[i][:3] if len(features[i]) > 3 else features[i]
             feature_str = [f"{x:.2f}" for x in feature_preview]
             suffix = "..." if len(features[i]) > 3 else ""
@@ -44,7 +43,6 @@ def draw_graph_ascii(adj, labels=None, node_names=None, features=None):
     if self_loops:
         print(f"\n  AUTO-BUCLES: {', '.join(self_loops)}")
     
-    # Mostrar vectores completos de características si están disponibles
     if features is not None:
         print(f"\n  VECTORES DE CARACTERÍSTICAS COMPLETOS:")
         for i in range(num_nodes):
@@ -64,7 +62,7 @@ def draw_graph_ascii(adj, labels=None, node_names=None, features=None):
             print(f"{symbol:>4}", end="")
         print()
 
-def draw_graph_matplotlib(adj, labels=None, node_names=None, features=None, title="Graph Visualization", save_path=None, show_features=True):
+def draw_graph_matplotlib(adj, labels=None, node_names=None, features=None, show_features=True, legend_fontsize=18):
     Config.print_subsection("VISUALIZACIÓN GRÁFICA DEL GRAFO")
     
     G = nx.Graph()
@@ -81,7 +79,6 @@ def draw_graph_matplotlib(adj, labels=None, node_names=None, features=None, titl
             if adj[i, j] > 0:
                 G.add_edge(i, j, weight=adj[i, j])
     
-    # Crear figura más grande para acomodar las características junto a nodos
     fig_width = 16 if show_features and features is not None else 10
     fig_height = 12 if show_features and features is not None else 8
     
@@ -99,13 +96,11 @@ def draw_graph_matplotlib(adj, labels=None, node_names=None, features=None, titl
     else:
         node_colors = 'lightblue'
     
-    # Dibujar nodos
     nx.draw_networkx_nodes(G, pos, 
                           node_color=node_colors,
                           node_size=1200,
                           alpha=0.8)
     
-    # Dibujar aristas
     nx.draw_networkx_edges(G, pos, 
                           alpha=0.6,
                           width=2)
@@ -157,30 +152,23 @@ def draw_graph_matplotlib(adj, labels=None, node_names=None, features=None, titl
             edge_labels[(i, j)] = f"{weight:.2f}"
     
     if edge_labels:
-        nx.draw_networkx_edge_labels(G, pos, edge_labels, font_size=8)
-    
-    plt.title(title, fontsize=16, fontweight='bold')
-    
+        nx.draw_networkx_edge_labels(G, pos, edge_labels, font_size=14)
+        
     if labels is not None:
         legend_elements = []
         for i, label in enumerate(unique_labels):
-            legend_elements.append(plt.scatter([], [], c=[colors[i]], s=100, label=f'Clase {label}'))
-        plt.legend(handles=legend_elements, loc='upper left')
+            legend_elements.append(plt.scatter([], [], c=[colors[i]], s=400, label=f'Clase {label}'))
+        plt.legend(handles=legend_elements, loc='upper left', fontsize=legend_fontsize)
     
     plt.axis('off')
     
     plt.margins(0.2)
-    plt.tight_layout()
-    
-    if save_path:
-        plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"  💾 Grafo guardado en: {save_path}")
-    
+    plt.tight_layout()    
     plt.show()
     
     return G
 
-def draw_attention_graph(adj, attention_matrix, labels=None, node_names=None, features=None, title="Attention Weights"):
+def draw_attention_graph(adj, attention_matrix, labels=None, node_names=None, features=None, title="Attention Weights", legend_fontsize=18):
     Config.print_subsection("VISUALIZACIÓN DE PESOS DE ATENCIÓN")
     
     G = nx.DiGraph() 
@@ -269,6 +257,13 @@ def draw_attention_graph(adj, attention_matrix, labels=None, node_names=None, fe
                             alpha=0.9),
                    verticalalignment='center',
                    horizontalalignment='left')
+    
+    if labels is not None:
+        unique_labels = np.unique(labels)
+        legend_elements = []
+        for i, label in enumerate(unique_labels):
+            legend_elements.append(plt.scatter([], [], c=[colors[i]], s=400, label=f'Clase {label}'))
+        plt.legend(handles=legend_elements, loc='upper left', fontsize=legend_fontsize)
     
     plt.title(f"{title}\n(Grosor de arista = peso de atención)", fontsize=16, fontweight='bold')
     plt.axis('off')
