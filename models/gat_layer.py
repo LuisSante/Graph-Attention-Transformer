@@ -62,6 +62,7 @@ class GATLayer:
         print(f"\n  Forward pass completed")
 
         if return_attention:
+            print("esto es alpha: ", alpha)
             return h_prime, alpha
         return h_prime
 

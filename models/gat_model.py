@@ -92,7 +92,7 @@ class GATModel:
         print(f"       Min: {result.min():.4f}, Max: {result.max():.4f}")
         return result
 
-    def forward(self, features, adj, training=True, return_attention=False):
+    def forward(self, features, adj, training=True, return_attention=True):
         Config. print_separator(" FORWARD PASS - MODELO COMPLETO")
         
         h = features
