@@ -25,14 +25,36 @@ def softmax_with_mask(x, mask, axis=1):
     denom = np.sum(exp, axis=axis, keepdims=True) + 1e-12
     return exp / denom
 
-def get_graph_statistics(adj, features):
+def get_graph_statistics(adj, features, directed=True):
     num_nodes = adj.shape[0]
-    num_edges = np.sum(adj) // 2 
-    density = num_edges / (num_nodes * (num_nodes - 1) / 2)
+    total_edges = int(np.sum(adj))
     
-    return {
-        'nodes': num_nodes,
-        'edges': int(num_edges),
-        'density': density,
-        'features_shape': features.shape
+    stats = {
+        "Nodes": num_nodes,
+        "Edges": total_edges,
+        "Graph type": "Directed" if directed else "Undirected",
+        "Node features": features.shape[1],
+        "Feature range": f"[{features.min():.3f}, {features.max():.3f}]"
     }
+    
+    if directed:
+        in_degrees = np.sum(adj, axis=0)
+        out_degrees = np.sum(adj, axis=1)
+        
+        stats.update({
+            "Average in-degree": f"{np.mean(in_degrees):.2f}",
+            "Average out-degree": f"{np.mean(out_degrees):.2f}",
+            "Max in-degree": int(np.max(in_degrees)),
+            "Max out-degree": int(np.max(out_degrees)),
+            "Reciprocal edges": int(np.sum(adj * adj.T) / 2),
+            "Density": f"{total_edges / (num_nodes * (num_nodes - 1)):.3f}"
+        })
+    else:
+        degrees = np.sum(adj, axis=0)
+        stats.update({
+            "Average degree": f"{np.mean(degrees):.2f}",
+            "Max degree": int(np.max(degrees)),
+            "Density": f"{total_edges / (num_nodes * (num_nodes - 1) / 2):.3f}"
+        })
+    
+    return stats
