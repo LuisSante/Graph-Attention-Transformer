@@ -2,7 +2,6 @@ import numpy as np
 from config import Config
 from data.dataset import create_graph
 from utils.utils import get_graph_statistics
-from models.gat_layer import MultiHeadGATLayer
 from models.gat_model import GATModel
 
 def run_complete_simulation():
@@ -53,23 +52,23 @@ def run_complete_simulation():
             max_attention = np.max(attention)
             max_pos = np.unravel_index(np.argmax(attention), attention.shape)
             print(f" Maximum attention: {max_attention:.4f} (node {max_pos[0]} → node {max_pos[1]})")
-    
-    Config.print_separator(" PREDICCIONES FINALES")
-    predictions = model.predict(features, adj)
-    
-    print(f"    COMPARISON PREDICTIONS vs. ACTUAL LABELS:")
-    print(f"        Predictions: {predictions}")
-    print(f"        Labels: {labels}")
-    print(f"        Matches: {np.sum(predictions == labels)}/{len(labels)}")
-    print(f"        Accuracy: {np.mean(predictions == labels)*100:.1f}%")
-    
-    Config.print_separator(" FINAL SUMMARY", "=", 100)
-    print(f"    Simulation completed successfully")
-    print(f"    Processed graph: {adj.shape[0]} nodes, {int(np.sum(adj)//2)} edges")
-    print(f"    GAT model: {len(model.layers)} layers, {sum(model.n_heads)} total heads")
-    print(f"    Predictions made with {np.mean(predictions == labels)*100:.1f}% accuracy")
-    print(f"    The model assigned different attention weights to different neighbors")
-    print(f"    Transformation process: {Config.IN_FEATURES} → {Config.HIDDEN_PER_HEAD * Config.N_HEADS} → {Config.N_CLASSES}")
+
+    #Config.print_separator(" PREDICCIONES FINALES")
+    #predictions = model.predict(features, adj)
+    #
+    #print(f"    COMPARISON PREDICTIONS vs. ACTUAL LABELS:")
+    #print(f"        Predictions: {predictions}")
+    #print(f"        Labels: {labels}")
+    #print(f"        Matches: {np.sum(predictions == labels)}/{len(labels)}")
+    #print(f"        Accuracy: {np.mean(predictions == labels)*100:.1f}%")
+    #
+    #Config.print_separator(" FINAL SUMMARY", "=", 100)
+    #print(f"    Simulation completed successfully")
+    #print(f"    Processed graph: {adj.shape[0]} nodes, {int(np.sum(adj)//2)} edges")
+    #print(f"    GAT model: {len(model.layers)} layers, {sum(model.n_heads)} total heads")
+    #print(f"    Predictions made with {np.mean(predictions == labels)*100:.1f}% accuracy")
+    #print(f"    The model assigned different attention weights to different neighbors")
+    #print(f"    Transformation process: {Config.IN_FEATURES} → {Config.HIDDEN_PER_HEAD * Config.N_HEADS} → {Config.N_CLASSES}")
 
 if __name__ == "__main__":
     np.set_printoptions(precision=4, suppress=True, linewidth=100)
