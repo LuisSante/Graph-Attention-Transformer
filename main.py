@@ -35,7 +35,7 @@ def run_complete_simulation():
         input_dim=Config.IN_FEATURES,
         hidden_dims=[Config.HIDDEN_PER_HEAD],
         output_dim=Config.N_CLASSES,
-        n_heads=[Config.N_HEADS, 1],  # 3 cabezas para oculta, 1 para salida
+        n_heads=[Config.N_HEADS],  # 3 cabezas para oculta, 1 para salida
         dropout=0.0,  # Sin dropout para simplificar
         seed=Config.SEED,
         final_activation='softmax'

@@ -116,7 +116,7 @@ class MultiHeadGATLayer:
                 outputs.append(out)
                 print(f" Head {i+1} - Output shape: {out.shape}")
         
-        Config.print_subsection("🔄 ADDING HEADER OUTPUTS")
+        Config.print_subsection(" ADDING HEADER OUTPUTS")
         
         if self.concat: 
             print(" Concatenating outputs...") 
