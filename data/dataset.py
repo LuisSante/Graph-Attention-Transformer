@@ -1,8 +1,9 @@
 import numpy as np
 from config import Config
+from plots.graph import draw_graph_ascii, draw_graph_matplotlib
 
 # Create a graph with 4 nodes (adjaceny matrix, edge list, self-loops)
-def create_graph(num_nodes=4, num_features=5, num_classes=3, self_loops=False, seed=Config.SEED):
+def create_graph(num_nodes=4, num_features=5, num_classes=3, self_loops=False, seed=Config.SEED, visualize=True, show_features=True):
     Config.print_subsection("CREANDO GRAFO DE ENTRADA")
     rng = np.random.RandomState(seed)
 
@@ -38,6 +39,12 @@ def create_graph(num_nodes=4, num_features=5, num_classes=3, self_loops=False, s
 
     print(f"\n  TAGS:") 
     print(f"{labels}")  
+
+    if visualize:
+        draw_graph_ascii(adj, labels, features=features)
+        draw_graph_matplotlib(adj, labels, features=features, 
+                            title=f"Graph with {num_nodes} nodes", 
+                            show_features=show_features)
 
     return adj, features, labels
 

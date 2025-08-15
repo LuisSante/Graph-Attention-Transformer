@@ -95,7 +95,7 @@ class GATModel:
         return result
 
     def forward(self, features, adj, training=True, return_attention=False):
-        Config. print_separator("🚀 FORWARD PASS - MODELO COMPLETO")
+        Config. print_separator(" FORWARD PASS - MODELO COMPLETO")
         
         h = features
         all_attentions = []

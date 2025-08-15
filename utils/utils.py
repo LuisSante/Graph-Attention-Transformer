@@ -29,12 +29,10 @@ def get_graph_statistics(adj, features):
     num_nodes = adj.shape[0]
     num_edges = np.sum(adj) // 2 
     density = num_edges / (num_nodes * (num_nodes - 1) / 2)
-    avg_degree = np.mean(np.sum(adj, axis=1))
     
     return {
         'nodes': num_nodes,
         'edges': int(num_edges),
         'density': density,
-        'avg_degree': avg_degree,
         'features_shape': features.shape
     }

@@ -16,7 +16,7 @@ def run_complete_simulation():
     
     # Crear datos de entrada
     adj, features, labels = create_graph(
-        num_nodes=6, 
+        num_nodes=Config.N_NODES, 
         num_features=Config.IN_FEATURES, 
         num_classes=Config.N_CLASSES, 
         self_loops=True, 
