@@ -53,9 +53,9 @@ def create_graph(num_nodes=4, num_features=5, num_classes=3, self_loops=False, s
     print(f"\n  LABELS:") 
     print(f"{labels}")  
 
-    if visualize:
-        draw_graph_ascii(adj, labels, features=features, directed=directed)
-        draw_graph_matplotlib(adj, labels, features=features, show_features=show_features, directed=directed)
+    #if visualize:
+    #    draw_graph_ascii(adj, labels, features=features, directed=directed)
+    #    draw_graph_matplotlib(adj, labels, features=features, show_features=show_features, directed=directed)
 
     return adj, features, labels
 

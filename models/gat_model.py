@@ -135,19 +135,3 @@ class GATModel:
         if return_attention:
             return h, all_attentions
         return h
-    
-    def predict(self, features, adj):
-        Config.print_subsection("PREDICTION")
-        logits = self.forward(features, adj, training=False)
-        
-        if self.final_activation == 'softmax':
-            predictions = np.argmax(logits, axis=1)
-            print(f"    Predictions (class with highest probability): {predictions}")
-        elif self.final_activation == 'sigmoid':
-            predictions = (logits > 0.5).astype(int)
-            print(f"    Binary predictions (>0.5): {predictions}")
-        else:
-            predictions = logits
-            print(f"    Predictions (logits): {predictions}")
-        
-        return predictions
