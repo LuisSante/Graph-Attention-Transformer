@@ -5,42 +5,51 @@ from utils.utils import get_graph_statistics
 from models.gat_model import GATModel
 
 def run_complete_simulation():
-    Config.print_separator("COMPLETE SIMULATION OF GRAPH ATTENTION NETWORK", "=", 100)
+    Config.print_separator("COMPLETE SIMULATION OF GRAPH ATTENTION NETWORK - GRAPH ENCODING", "=", 100)
     print("     Objectives:")
     print("         ✓ Create a sample directed graph") 
-    print("         ✓ Initialize a GAT model")
+    print("         ✓ Initialize a GAT model for GRAPH representation learning")
     print("         ✓ Show the entire forward pass process")
-    print("         ✓ Make predictions")
+    print("         ✓ Extract dense vector representation of the ENTIRE GRAPH")
     print("         ✓ Analyze asymmetric attention coefficients") 
+    print("         ✗ NO classification - just encoding like G-Retriever")
     
-    adj, features, labels = create_graph(
+    adj, features = create_graph(
         num_nodes=Config.N_NODES, 
         num_features=Config.IN_FEATURES, 
-        num_classes=Config.N_CLASSES, 
         directed=Config.DIRECTED,  
         density=Config.GRAPH_DENSITY, 
         seed=Config.SEED,
         visualize=True
     )
     
-    stats = get_graph_statistics(adj, features, directed=Config.DIRECTED)  # Actualizado
+    stats = get_graph_statistics(adj, features, directed=Config.DIRECTED)
     Config.print_subsection(" GRAPH STATISTICS")
     for key, value in stats.items():
         print(f"  {key}: {value}")
     
-    Config.print_separator(" CREATING GAT MODEL")
+    Config.print_separator(" CREATING GAT MODEL FOR GRAPH ENCODING")
     model = GATModel(
         input_dim=Config.IN_FEATURES,
-        hidden_dims=[Config.HIDDEN_PER_HEAD], # Controlar el numero de capas
-        output_dim=Config.N_CLASSES,
-        n_heads=[Config.N_HEADS],  # 3 cabezas para oculta, 1 para salida
-        dropout=0.0,  # Sin dropout para simplificar
+        hidden_dims=[Config.HIDDEN_PER_HEAD], 
+        output_dim=Config.GRAPH_EMBEDDING_DIM, 
+        n_heads=[Config.N_HEADS],
+        dropout=0.0,
         seed=Config.SEED,
-        final_activation='softmax'
+        pooling_method='max'  
     )
     
-    Config.print_separator(" FORWARD PASS WITH ATTENTION ANALYSIS")
-    _, attentions = model.forward(features, adj, training=False, return_attention=True)
+    Config.print_separator(" FORWARD PASS - GRAPH ENCODING")
+    graph_embedding, attentions = model.forward(features, adj, training=False, return_attention=True)
+    
+    print(f"\n GRAPH ENCODING RESULTS:")
+    print(f"   Graph embedding shape: {graph_embedding.shape}")
+    print(f"   Graph embedding: {graph_embedding}")
+    print(f"   L2 norm: {np.linalg.norm(graph_embedding):.4f}")
+    print(f"\n   This embedding can now be used for:")
+    print(f"     • Similarity search between graphs")
+    print(f"     • Input to LLM via soft prompting")
+    print(f"     • Downstream tasks like classification")
 
 
 if __name__ == "__main__":
