@@ -45,7 +45,7 @@ def create_graph(num_nodes=4, num_features=5, self_loops=False, seed=Config.SEED
     print(f"\n  NODE FEATURES (unlabeled):") 
     print(f"{features}") 
 
-    return adj, features  # CAMBIADO: Solo devuelve adj y features, no labels
+    return adj, features 
 
 def add_self_loops(adj):
     adj_with_loops = adj.copy()

@@ -6,13 +6,6 @@ from models.gat_model import GATModel
 
 def run_complete_simulation():
     Config.print_separator("COMPLETE SIMULATION OF GRAPH ATTENTION NETWORK - GRAPH ENCODING", "=", 100)
-    print("     Objectives:")
-    print("         ✓ Create a sample directed graph") 
-    print("         ✓ Initialize a GAT model for GRAPH representation learning")
-    print("         ✓ Show the entire forward pass process")
-    print("         ✓ Extract dense vector representation of the ENTIRE GRAPH")
-    print("         ✓ Analyze asymmetric attention coefficients") 
-    print("         ✗ NO classification - just encoding like G-Retriever")
     
     adj, features = create_graph(
         num_nodes=Config.N_NODES, 
@@ -32,26 +25,15 @@ def run_complete_simulation():
     model = GATModel(
         input_dim=Config.IN_FEATURES,
         hidden_dims=[Config.HIDDEN_PER_HEAD], 
-        output_dim=Config.GRAPH_EMBEDDING_DIM, 
         n_heads=[Config.N_HEADS],
         dropout=0.0,
         seed=Config.SEED,
-        pooling_method='max'  
+        pooling_method='mean'
     )
     
     Config.print_separator(" FORWARD PASS - GRAPH ENCODING")
     graph_embedding, attentions = model.forward(features, adj, training=False, return_attention=True)
     
-    print(f"\n GRAPH ENCODING RESULTS:")
-    print(f"   Graph embedding shape: {graph_embedding.shape}")
-    print(f"   Graph embedding: {graph_embedding}")
-    print(f"   L2 norm: {np.linalg.norm(graph_embedding):.4f}")
-    print(f"\n   This embedding can now be used for:")
-    print(f"     • Similarity search between graphs")
-    print(f"     • Input to LLM via soft prompting")
-    print(f"     • Downstream tasks like classification")
-
-
 if __name__ == "__main__":
     np.set_printoptions(precision=4, suppress=True, linewidth=100)
     run_complete_simulation()

@@ -2,9 +2,8 @@ class Config:
     SEED = 42
     N_NODES = 6  
     IN_FEATURES = 5
-    HIDDEN_PER_HEAD = 5 ## mantener en 5 para que coincida con IN_FEATURES
+    HIDDEN_PER_HEAD = 5  
     N_HEADS = 3
-    GRAPH_EMBEDDING_DIM = 16  # CAMBIADO: Dimensión del embedding final del grafo
     CONCAT = True
     DIRECTED = True  
     GRAPH_DENSITY = 0.4
