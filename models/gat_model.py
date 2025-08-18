@@ -60,7 +60,7 @@ class GATModel:
         return result
     
     def _graph_pooling(self, node_embeddings, mask=None):
-        Config.print_subsection(f" GRAPH POOLING - {self.pooling_method.upper()}")
+        Config.print_title(f" GRAPH POOLING - {self.pooling_method.upper()}\n")
         print(f"  Input node embeddings shape: {node_embeddings.shape}")
         
         if mask is not None:
@@ -90,12 +90,11 @@ class GATModel:
                 print(f"  Applied SUM pooling")
         
         print(f"  Output graph embedding shape: {graph_embedding.shape}")
-        print(f"  Graph embedding: {graph_embedding}")
+        #print(f"  Graph embedding: {graph_embedding}")
         
         return graph_embedding
 
     def forward(self, features, adj, training=True, return_attention=True):
-        Config.print_separator(" FORWARD PASS - SINGLE GRAPH ENCODING")
         
         h = features
         all_attentions = []
@@ -124,6 +123,7 @@ class GATModel:
         
         final_graph_embedding = self._graph_pooling(h)
         
+        print(f"\n{'_' * 130}")
         print(f"\n  FINAL GRAPH EMBEDDING:") 
         print(f"Shape: {final_graph_embedding.shape}") 
         print(f" Embedding: {final_graph_embedding}")
@@ -147,13 +147,13 @@ class GATModel:
         print(f"     Masks shape: {batch_masks.shape}")
         
         for graph_idx in range(n_graphs):
-            print(f"\n PROCESSING GRAPH {graph_idx+1}/{n_graphs}")
+            Config.print_subsection(f"PROCESSING GRAPH {graph_idx+1}/{n_graphs}")
             
             features = batch_features[graph_idx]
             adj = batch_adj[graph_idx]
             mask = batch_masks[graph_idx]
             
-            print(f"   Graph {graph_idx+1} - Valid nodes: {mask.sum()}/{len(mask)}")
+            print(f"  Graph {graph_idx+1} - Valid nodes: {mask.sum()}/{len(mask)}")
             
             h = features
             all_attentions = []
@@ -178,11 +178,12 @@ class GATModel:
             if return_attention:
                 batch_all_attentions.append(all_attentions)
             
-            print(f"   Graph {graph_idx+1} embedding: {graph_embedding}")
-            print(f"   L2 norm: {np.linalg.norm(graph_embedding):.4f}")
+            print(f"\n  Graph {graph_idx+1} embedding: {graph_embedding}")
+            print(f"  L2 norm: {np.linalg.norm(graph_embedding):.4f}")
         
         batch_embeddings = np.array(batch_embeddings)
         
+        print(f"\n{'_' * 130}")
         print(f"\n  FINAL BATCH EMBEDDINGS:")
         print(f"   Shape: {batch_embeddings.shape}")
         print(f"   Embeddings:\n{batch_embeddings}")
@@ -204,7 +205,7 @@ class GATModel:
         print(f"     Graph sizes: {[g['num_nodes'] for g in graphs_data]}")
         
         for graph_idx, graph_data in enumerate(graphs_data):
-            print(f"\n{'🔥'} PROCESSING GRAPH {graph_idx+1}/{n_graphs}")
+            print(f"\n PROCESSING GRAPH {graph_idx+1}/{n_graphs}")
             
             features = graph_data['features']
             adj = graph_data['adj']
@@ -241,6 +242,7 @@ class GATModel:
         
         batch_embeddings = np.array(batch_embeddings)
         
+        print(f"\n{'_' * 130}")
         print(f"\n  FINAL BATCH EMBEDDINGS:")
         print(f"   Shape: {batch_embeddings.shape}")
         print(f"   Embeddings:\n{batch_embeddings}")

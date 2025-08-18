@@ -15,8 +15,8 @@ def leaky_relu(arr, alpha=0.2):
     return result
 
 def softmax_with_mask(x, mask, axis=1):
-    print(f"Applying softmax with mask...") 
-    print(f"Input shape: {x.shape}, Active mask: {mask.sum()} elements")
+    print(f"      Applying softmax with mask...") 
+    print(f"      Input shape: {x.shape}, Active mask: {mask.sum()} elements")
 
     x_masked = np.where(mask, x, Config.LARGE_NEGATIVE_NUMBER)
     x_shifted = x_masked - np.max(x_masked, axis=axis, keepdims=True)

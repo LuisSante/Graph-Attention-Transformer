@@ -85,7 +85,7 @@ def run_multi_graph_simulation():
     return batch_embeddings, batch_attentions
 
 def run_complete_simulation():
-    np.set_printoptions(precision=4, suppress=True, linewidth=100)
+    np.set_printoptions(precision=4, suppress=True, linewidth=130)
     
     if Config.DETAIL_GRAPH == "single_graph":
         return run_single_graph_simulation()

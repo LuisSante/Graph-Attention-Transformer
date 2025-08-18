@@ -16,9 +16,9 @@ class GATAttentionHead:
             print(f"  Entry: {in_features} features") 
             print(f"  Output: {out_features} features") 
             print(f"  Alpha (LeakyReLU): {alpha}") 
-            print(f"\n  Initializing transformation matrix W...") 
-            print(f"\n  Initializing attention 'a' vector to...") 
-            print(f"\n  GAT layer initialized successfully")
+            print(f"  Initializing transformation matrix W...") 
+            print(f"  Initializing attention 'a' vector to...") 
+            print(f"  GAT layer initialized successfully")
 
 
     def forward(self, h, adj, return_attention=False):
@@ -40,8 +40,7 @@ class GATAttentionHead:
         # Apply attention only to connected nodes
         attention = softmax_with_mask(e, adj.astype(bool))
         h_prime = np.dot(attention, Wh)
-        
-        print(f"{h_prime.shape}")
+        #print(f"{h_prime.shape}")
         
         if return_attention:
             return h_prime, attention
@@ -68,7 +67,7 @@ class MultiHeadGATLayer:
         self.output_dim = n_heads * out_features_per_head if concat else out_features_per_head
 
     def forward(self, h, adj, return_attentions=False, training=True):
-        print(f"    Processing {self.n_heads} attention heads...")
+        print(f"    Processing {self.n_heads} attention heads...\n")
         head_outputs = []
         head_attentions = []
         
