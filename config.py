@@ -15,6 +15,17 @@ class Config:
     BATCH_PROCESSING = "padding"  # "padding" or "sequential"
     MAX_NODES = N_NODES
 
+    NUM_CLASSES = 3
+    LABEL_STRATEGY = "size_based"  # "random", "size_based", "density_based"
+    
+    # MLP Configuration
+    MLP_HIDDEN_DIMS = [32, 16]
+    MLP_DROPOUT = 0.1
+    MLP_ACTIVATION = "relu"  # "relu", "elu", "tanh"
+    
+    RETURN_ATTENTION = True
+    RETURN_EMBEDDINGS = True
+
     @staticmethod
     def print_separator(title, char="=", width=80):
         print(f"\n{char * width}")

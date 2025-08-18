@@ -1,6 +1,56 @@
 import numpy as np
 from config import Config
 
+def generate_graph_labels(graphs_data, num_classes=3, seed=42, label_strategy='size_based'):
+    Config.print_subsection("GENERATING GRAPH LABELS")
+    
+    rng = np.random.RandomState(seed)
+    n_graphs = len(graphs_data)
+    
+    print(f"  Creating {num_classes} classes for {n_graphs} graphs")
+    print(f"  Label strategy: {label_strategy}")
+    
+    if label_strategy == 'random':
+        labels = rng.randint(0, num_classes, n_graphs)
+        
+    elif label_strategy == 'size_based':
+        sizes = [g['num_nodes'] for g in graphs_data]
+        sorted_indices = np.argsort(sizes)
+        labels = np.zeros(n_graphs, dtype=int)
+        
+        graphs_per_class = n_graphs // num_classes
+        for i, idx in enumerate(sorted_indices):
+            class_id = min(i // max(graphs_per_class, 1), num_classes - 1)
+            labels[idx] = class_id
+            
+    elif label_strategy == 'density_based':
+        densities = []
+        for g in graphs_data:
+            num_edges = int(np.sum(g['adj']))
+            num_nodes = g['num_nodes']
+            possible_edges = num_nodes * (num_nodes - 1)
+            density = num_edges / max(possible_edges, 1)
+            densities.append(density)
+        
+        sorted_indices = np.argsort(densities)
+        labels = np.zeros(n_graphs, dtype=int)
+        
+        graphs_per_class = n_graphs // num_classes
+        for i, idx in enumerate(sorted_indices):
+            class_id = min(i // max(graphs_per_class, 1), num_classes - 1)
+            labels[idx] = class_id
+    
+    noise_indices = rng.choice(n_graphs, size=max(1, n_graphs // 10), replace=False)
+    for idx in noise_indices:
+        labels[idx] = rng.randint(0, num_classes)
+    
+    print(f"  Label distribution: {np.bincount(labels)}")
+    
+    for i, graph in enumerate(graphs_data):
+        graph['label'] = labels[i]
+    
+    return labels
+
 def create_graph(num_nodes=4, num_features=5, seed=Config.SEED, 
                  directed=True, density=0.3):
     print("CREATING INPUT GRAPH - GRAPH ENCODING")
