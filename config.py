@@ -10,7 +10,7 @@ class Config:
     LARGE_NEGATIVE_NUMBER = -1e30
     
     # Multi-graph configuration
-    DETAIL_GRAPH = "single_graph"  # "single_graph" or "multi_graph"
+    DETAIL_GRAPH = "multi_graph"  # "single_graph" or "multi_graph"
     N_GRAPHS = 3  
     BATCH_PROCESSING = "padding"  # "padding" or "sequential"
     MAX_NODES = N_NODES
@@ -20,6 +20,10 @@ class Config:
         print(f"\n{char * width}")
         print(f"{title:^{width}}")
         print(f"{char * width}")
+
+    @staticmethod
+    def print_title(title, width=80):
+        print(f"{title:^{width}}")
     
     @staticmethod
     def print_subsection(title, char="-", width=60):

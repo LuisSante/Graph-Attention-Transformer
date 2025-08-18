@@ -3,23 +3,23 @@ from utils.utils import init_weights, leaky_relu, softmax_with_mask
 from config import Config
 
 class GATAttentionHead:
-    def __init__(self, in_features, out_features, alpha=0.2, seed=None):
-        Config.print_subsection(f" INITIALIZING GAT LAYER ") 
-        print(f"  Entry: {in_features} features") 
-        print(f"  Output: {out_features} features") 
-        print(f"  Alpha (LeakyReLU): {alpha}") 
-
+    def __init__(self, in_features, out_features, id_head, alpha=0.2, seed=None):
         self.in_features = in_features
         self.out_features = out_features
         self.alpha = alpha
 
         self.W = init_weights(in_features, out_features, seed) 
-        print(f"\n  Initializing transformation matrix W...") 
-
-        print(f"\n  Initializing attention 'a' vector to...") 
         self.a = init_weights(2 * out_features, 1, seed=seed).flatten()
 
-        print(f"\n  GAT layer initialized successfully")
+        if id_head == 0:
+            Config.print_subsection(f" INITIALIZING GAT LAYER ") 
+            print(f"  Entry: {in_features} features") 
+            print(f"  Output: {out_features} features") 
+            print(f"  Alpha (LeakyReLU): {alpha}") 
+            print(f"\n  Initializing transformation matrix W...") 
+            print(f"\n  Initializing attention 'a' vector to...") 
+            print(f"\n  GAT layer initialized successfully")
+
 
     def forward(self, h, adj, return_attention=False):
         print(f"        Processing head: {h.shape} -> ", end="")
@@ -60,8 +60,9 @@ class MultiHeadGATLayer:
         # Create attention heads
         self.attention_heads = []
         for i in range(n_heads):
+            # print("head", i)
             head_seed = seed + i if seed is not None else None
-            head = GATAttentionHead(in_features, out_features_per_head, alpha, head_seed)
+            head = GATAttentionHead(in_features, out_features_per_head, i, alpha, head_seed)
             self.attention_heads.append(head)
             
         self.output_dim = n_heads * out_features_per_head if concat else out_features_per_head

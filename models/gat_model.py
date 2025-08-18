@@ -6,7 +6,7 @@ class GATModel:
     def __init__(self, input_dim, hidden_dims, n_heads, 
                  dropout=0.0, alpha=0.2, seed=None, pooling_method='mean', 
                  batch_processing='padding'):
-        Config.print_separator(" INITIALIZING GAT MODEL")
+        Config.print_title(" INITIALIZING GAT MODEL")
         
         self.input_dim = input_dim
         self.hidden_dims = hidden_dims if isinstance(hidden_dims, list) else [hidden_dims]
@@ -135,8 +135,7 @@ class GATModel:
 
     def forward_batch_padded(self, batch_features, batch_adj, batch_masks, 
                            training=True, return_attention=True):
-        Config.print_separator(" FORWARD PASS - PADDED BATCH PROCESSING")
-        
+
         n_graphs = batch_features.shape[0]
         batch_embeddings = []
         batch_all_attentions = []

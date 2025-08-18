@@ -3,7 +3,7 @@ from config import Config
 
 def create_graph(num_nodes=4, num_features=5, self_loops=False, seed=Config.SEED, 
                  directed=True, density=0.3):
-    Config.print_subsection("CREATING INPUT GRAPH - GRAPH ENCODING")
+    print("CREATING INPUT GRAPH - GRAPH ENCODING")
     rng = np.random.RandomState(seed)
 
     print(f"  Generating {'directed' if directed else 'undirected'} adjacency matrix {num_nodes}x{num_nodes}...")
@@ -59,7 +59,7 @@ def create_multiple_graphs(n_graphs, min_nodes=3, max_nodes=8, num_features=5,
         num_nodes = rng.randint(min_nodes, max_nodes + 1)
         graph_seed = seed + i * 100
         
-        print(f"\n     GRAPH {i+1}/{n_graphs} - {num_nodes} nodes")
+        Config.print_subsection(f"GRAPH {i+1}/{n_graphs} - {num_nodes} nodes")
         
         adj, features = create_graph(
             num_nodes=num_nodes,
@@ -119,18 +119,3 @@ def pad_graphs_batch(graphs_data, max_nodes=None):
     print(f"    Real nodes per graph: {batch_masks.sum(axis=1)}")
     
     return batch_adj, batch_features, batch_masks
-
-def add_self_loops(adj):
-    adj_with_loops = adj.copy()
-    np.fill_diagonal(adj_with_loops, 1.0)
-    return adj_with_loops
-
-def adj_to_edge_index(adj):
-    src, dst = np.nonzero(adj)
-    return np.vstack((src, dst))
-
-def edge_index_to_adj(edge_index, num_nodes):
-    adj = np.zeros((num_nodes, num_nodes), dtype=np.float32)
-    src, dst = edge_index
-    adj[src, dst] = 1.0
-    return adj

@@ -6,7 +6,7 @@ def init_weights(input_dim, output_dim, seed=None):
     rng = np.random.RandomState(seed)
     limit = np.sqrt(6.0 / (input_dim + output_dim))
     weights = rng.uniform(-limit, limit, (input_dim, output_dim)).astype(float)
-    print(f"    Initializing weights: {weights.shape} with limit ±{limit:.4f}")
+    #print(f"    Initializing weights: {weights.shape} with limit ±{limit:.4f}")
     return weights
 
 def leaky_relu(arr, alpha=0.2):
