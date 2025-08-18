@@ -1,7 +1,7 @@
 import numpy as np
 from config import Config
 
-def create_graph(num_nodes=4, num_features=5, self_loops=False, seed=Config.SEED, 
+def create_graph(num_nodes=4, num_features=5, seed=Config.SEED, 
                  directed=True, density=0.3):
     print("CREATING INPUT GRAPH - GRAPH ENCODING")
     rng = np.random.RandomState(seed)
@@ -19,15 +19,11 @@ def create_graph(num_nodes=4, num_features=5, self_loops=False, seed=Config.SEED
         adj = adj.astype(np.float32)
         print(f"    Created undirected graph with density ~{density}")
 
-    if self_loops:
-        np.fill_diagonal(adj, 1.0)
-        print("    Added self-loops to adjacency matrix.")
-
     print(f"    Generating node features {num_nodes}x{num_features}...") 
     features = rng.randn(num_nodes, num_features).astype(np.float32) 
 
     total_edges = int(np.sum(adj))
-    possible_edges = num_nodes * (num_nodes - 1) if not self_loops else num_nodes * num_nodes
+    possible_edges = num_nodes * (num_nodes - 1)
     actual_density = total_edges / possible_edges
 
     print(f"\n  GRAPH SUMMARY:") 
@@ -36,7 +32,6 @@ def create_graph(num_nodes=4, num_features=5, self_loops=False, seed=Config.SEED
     print(f"    Edges: {total_edges}") 
     print(f"    Density: {actual_density:.3f}")
     print(f"    Features per node: {num_features}") 
-    print(f"    Self-loops: {'Yes' if self_loops else 'No'}")
     print(f"    Target: Graph-level embedding (NO labels)")
 
     print(f"\n  ADJACENCY MATRIX:") 

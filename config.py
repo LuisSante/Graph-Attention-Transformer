@@ -10,8 +10,8 @@ class Config:
     LARGE_NEGATIVE_NUMBER = -1e30
     
     # Multi-graph configuration
-    DETAIL_GRAPH = "single_graph"  # "single_graph" or "multi_graph"
-    N_GRAPHS = 3  
+    DETAIL_GRAPH = "multi_graph"  # "single_graph" or "multi_graph"
+    N_GRAPHS = 3 
     BATCH_PROCESSING = "padding"  # "padding" or "sequential"
     MAX_NODES = N_NODES
 
