@@ -1,8 +1,8 @@
 import numpy as np
 from config import Config
 
-# xavier initialization for weights
-def init_weights(input_dim,  output_dim, seed=None):
+def init_weights(input_dim, output_dim, seed=None):
+    """Xavier initialization for weights"""
     rng = np.random.RandomState(seed)
     limit = np.sqrt(6.0 / (input_dim + output_dim))
     weights = rng.uniform(-limit, limit, (input_dim, output_dim)).astype(float)
@@ -38,14 +38,7 @@ def get_graph_statistics(adj, features, directed=True):
     }
     
     if directed:
-        in_degrees = np.sum(adj, axis=0)
-        out_degrees = np.sum(adj, axis=1)
-        
         stats.update({
-            "Average in-degree": f"{np.mean(in_degrees):.2f}",
-            "Average out-degree": f"{np.mean(out_degrees):.2f}",
-            "Max in-degree": int(np.max(in_degrees)),
-            "Max out-degree": int(np.max(out_degrees)),
             "Reciprocal edges": int(np.sum(adj * adj.T) / 2),
             "Density": f"{total_edges / (num_nodes * (num_nodes - 1)):.3f}"
         })
@@ -56,5 +49,29 @@ def get_graph_statistics(adj, features, directed=True):
             "Max degree": int(np.max(degrees)),
             "Density": f"{total_edges / (num_nodes * (num_nodes - 1) / 2):.3f}"
         })
+    
+    return stats
+
+def get_batch_statistics(graphs_data, directed=True):
+    n_graphs = len(graphs_data)
+    densities = []
+    
+    for graph in graphs_data:
+        num_nodes = graph['num_nodes']
+        num_edges = int(np.sum(graph['adj']))
+        if directed:
+            possible_edges = num_nodes * (num_nodes - 1)
+        else:
+            possible_edges = num_nodes * (num_nodes - 1) / 2
+        density = num_edges / max(possible_edges, 1)
+        densities.append(density)
+    
+    stats = {
+        "Number of graphs": n_graphs,
+        "Density range": f"{min(densities):.3f}-{max(densities):.3f}",
+        "Average density": f"{np.mean(densities):.3f}",
+        "Graph type": "Directed" if directed else "Undirected",
+        "Features per node": graphs_data[0]['features'].shape[1]
+    }
     
     return stats
